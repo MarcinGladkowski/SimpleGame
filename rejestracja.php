@@ -60,8 +60,17 @@
         $_SESSION['e_bot'] = 'Potwierdź, że nie jesteś botem';
       }
 
-      require_once('connect.php');
+      //remember data
+      $_SESSION['fr_nick'] = $nick;
+      $_SESSION['fr_email'] = $email;
+      $_SESSION['fr_haslo1'] = $haslo1;
+      $_SESSION['fr_haslo2'] = $haslo2;
 
+      if(isset($_POST['regulamin'])){
+        $_SESSION['fr_regulamin'] = true;
+      }
+
+      require_once('connect.php');
       mysqli_report(MYSQLI_REPORT_STRICT);
 
       try{
@@ -142,7 +151,12 @@
     <body>
          
         <form method="POST">
-          Nickname: </br><input type="text" name="nick" /></br>
+          Nickname: </br><input type="text" value="<?php
+            if(isset($_SESSION['fr_nick'])){
+              echo $_SESSION['fr_nick'];
+              unset($_SESSION['fr_nick']);
+            }
+          ?>" name="nick" /></br>
 
           <?php
             if(isset($_SESSION['e_nick'])){
@@ -151,7 +165,14 @@
             }
           ?>
 
-          E-mail: </br><input type="text" name="email" /></br>
+          E-mail: </br><input value="<?php
+            if(isset($_SESSION['fr_email'])){
+              echo $_SESSION['fr_email'];
+              unset($_SESSION['fr_email']);
+            }
+          ?>
+
+          " type="text" name="email" /></br>
 
           <?php
             if(isset($_SESSION['e_email'])){
@@ -160,7 +181,14 @@
             }
           ?>
 
-          Twoje hasło: </br><input type="password" name="haslo1" /></br>
+          Twoje hasło: </br><input value="<?php
+            if(isset($_SESSION['fr_haslo1'])){
+              echo $_SESSION['fr_haslo1'];
+              unset($_SESSION['fr_haslo1']);
+            }
+          ?>
+
+          "type="password" name="haslo1" /></br>
 
           <?php
             if(isset($_SESSION['e_haslo'])){
@@ -169,10 +197,24 @@
             }
           ?>
 
-          Powtórz hasło: </br><input type="password" name="haslo2" /></br>
+          Powtórz hasło: </br><input value="<?php
+            if(isset($_SESSION['fr_haslo2'])){
+              echo $_SESSION['fr_haslo2'];
+              unset($_SESSION['fr_haslo2']);
+            }
+          ?>
+
+          " type="password" name="haslo2" /></br>
 
           <label>
-            <input type="checkbox" name="regulamin" />Akceptuję regulamin
+            <input type="checkbox" name="regulamin" value="<?php
+            if(isset($_SESSION['fr_regulamin'])){
+              echo "checked";
+              unset($_SESSION['fr_regulamin']);
+            }
+          ?>
+
+            "/>Akceptuję regulamin
           </label>
 
           <?php

@@ -10,13 +10,12 @@
 
     require_once('connect.php');
 
-    $polaczenie = @new mysqli($host, $db_user, $db_password, $db_name);
-
-    if($polaczenie->connect_errno!=0)
-    {
-        echo "Error ".$polaczenie->connect_errno;
-    }
-    else {
+    try{
+        $polaczenie = new mysqli($host, $db_user, $db_password, $db_name);
+            if($polaczenie->connect_errno!=0)
+              {
+                  throw new Exception(mysqli_connect_errno());
+              } else {
         
         $login = $_POST['login'];
         $haslo = $_POST['haslo'];
@@ -64,7 +63,14 @@
         }
         
         $polaczenie->close();
+        }
+
     }
+    catch(Exception $e){
+        echo '<div class="error">Błąd sewera</div>';
+        echo '</br>Informacja developerska'.$e;
+    }
+
 
   
 ?>
