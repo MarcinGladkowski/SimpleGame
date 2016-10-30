@@ -71,7 +71,7 @@
               throw new Exception(mysqli_connect_errno());
           } else {
             //is email exists?
-            $rezultat = $polaczenie->query("SELECT id FROM uzytkownicy WHERE eeemail='$email'");
+            $rezultat = $polaczenie->query("SELECT id FROM uzytkownicy WHERE email='$email'");
 
               if(!$rezultat) {
                 throw new Exception($polaczenie->error);
@@ -83,6 +83,27 @@
                   $_SESSION['e_email'] = 'Istnieje już konto o takim email';
                 }
 
+             //is nick exists?
+            $rezultat = $polaczenie->query("SELECT id FROM uzytkownicy WHERE user='$nick'");
+
+              if(!$rezultat) {
+                throw new Exception($polaczenie->error);
+              }
+
+              $ile_takich_nickow = $rezultat->num_rows;
+                if($ile_takich_nickow>0){
+                  $wszystko_OK = false;
+                  $_SESSION['e_nick'] = 'Istnieje już konto o takim nicku';
+                }
+
+              if($wszystko_OK==true){
+                  if($polaczenie->query("INSERT INTO uzytkownicy VALUES(NULL, '$nick', '$haslo_hash', '$email', 100, 100, 100, 14)")){
+                    $_SESSION['udanarejestracja']=true;
+                    header('Location:witamy.php');
+                  } else {
+                    throw new Exception($polaczenie->error);
+                  }
+              }
 
             $polaczenie->close();
           }
@@ -92,11 +113,7 @@
         echo '</br>Informacja developerska'.$e;
       }
 
-      if($wszystko_OK==true){
-        //good validation
-        echo "Udana walidacja";
-        exit();
-      }
+    
 
     }
 
