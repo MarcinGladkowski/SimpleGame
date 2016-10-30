@@ -21,8 +21,11 @@
         {
             $ilu_userow = $rezultat->num_rows;
             if($ilu_userow>0){
-                
+
+                $_SESSION['zalogowany'] = true;
+
                 $wiersz = $rezultat->fetch_assoc();
+                $_SESSION['id'] = $wiersz['id'];
                 $_SESSION['user'] = $wiersz['user'];
                 $_SESSION['drewno'] = $wiersz['drewno'];
                 $_SESSION['kamien'] = $wiersz['kamien'];
@@ -40,7 +43,7 @@
 
             $_SESSION['blad'] = '<span>Nieprawidłowe login lub hasło</span>';
 
-            header('location:index.php')
+            header('location:index.php');
                 
             }
         }
